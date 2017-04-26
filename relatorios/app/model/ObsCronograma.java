@@ -1,12 +1,33 @@
 package model;
 
+import java.sql.Timestamp;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "obs_cronograma")
 public class ObsCronograma {
 
-	private int id;
-	private int status_id;
+	@Id
+	@Column(name = "id")
+	@GeneratedValue
+	private int id;	
+	@Column(name = "previsto")
 	private String previsto;
+	@Column(name = "realizado")
 	private String realizado;
+	@Column(name = "criado")
+	private Timestamp criado;
 	
+	@OneToOne
+	@JoinColumn(name = "status_id")
+	private Status status;
 	
 	public int getId() {
 		return id;
@@ -14,12 +35,7 @@ public class ObsCronograma {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getStatus_id() {
-		return status_id;
-	}
-	public void setStatus_id(int status_id) {
-		this.status_id = status_id;
-	}
+	
 	public String getPrevisto() {
 		return previsto;
 	}
@@ -31,6 +47,18 @@ public class ObsCronograma {
 	}
 	public void setRealizado(String realizado) {
 		this.realizado = realizado;
+	}
+	public Status getStatus() {
+		return status;
+	}
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+	public Timestamp getCriado() {
+		return criado;
+	}
+	public void setCriado(Timestamp criado) {
+		this.criado = criado;
 	}
 	
 	

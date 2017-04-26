@@ -3,21 +3,53 @@ package model;
 import java.sql.Date;
 import java.sql.Time;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "atividades")
 public class Atividades {
 
+	@Id
+	@Column(name = "id")
+	@GeneratedValue
 	private int id;
-	private int status_id;
-	private int consultor_id;
-	private int cliente_id;
+	@Column(name = "data")
 	private Date data;
+	@Column(name = "area")
 	private String area;
+	@Column(name = "programa")
 	private String programa;
+	@Column(name = "ferramenta")
 	private String ferramenta;
+	@Column(name = "atividades")
 	private String atividades;
+	@Column(name = "tipo")
 	private String tipo;
+	@Column(name = "inicio")
 	private Time inicio;
+	@Column(name = "fim")
 	private Time fim;
+	@Column(name = "tempo")
 	private Time tempo;
+	
+	@OneToOne
+	@JoinColumn(name = "status_id")
+	private Status status;
+	
+	@OneToOne
+	@JoinColumn(name = "consultor_id")
+	private Consultor consultor;
+	
+	@OneToOne
+	@JoinColumn(name = "cliente_id")
+	private Cliente cliente;
+	
 
 	public int getId() {
 		return id;
@@ -26,31 +58,7 @@ public class Atividades {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public int getStatus_id() {
-		return status_id;
-	}
-
-	public void setStatus_id(int status_id) {
-		this.status_id = status_id;
-	}
-
-	public int getConsultor_id() {
-		return consultor_id;
-	}
-
-	public void setConsultor_id(int consultor_id) {
-		this.consultor_id = consultor_id;
-	}
-
-	public int getCliente_id() {
-		return cliente_id;
-	}
-
-	public void setCliente_id(int cliente_id) {
-		this.cliente_id = cliente_id;
-	}
-
+	
 	public Date getData() {
 		return data;
 	}
@@ -97,6 +105,31 @@ public class Atividades {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+	
+	
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public Consultor getConsultor() {
+		return consultor;
+	}
+
+	public void setConsultor(Consultor consultor) {
+		this.consultor = consultor;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public Time getInicio() {

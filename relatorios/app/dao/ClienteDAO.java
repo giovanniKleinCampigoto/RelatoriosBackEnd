@@ -12,8 +12,9 @@ import util.HibernateUtil;
 
 public class ClienteDAO {
 	
-	public void adicionarCliente (Cliente cliente) {
+	public Integer adicionarCliente (Cliente cliente) {
 		
+		int id = 0;
         Transaction trns = null;
         HibernateUtil util;
         
@@ -23,6 +24,7 @@ public class ClienteDAO {
         try {
             trns = session.beginTransaction();
             session.save(cliente);
+            id = cliente.getId();
             session.getTransaction().commit();
         } catch (RuntimeException e) {
             if (trns != null) {
@@ -30,9 +32,10 @@ public class ClienteDAO {
             }
             e.printStackTrace();
         } finally {
-            session.flush();
+            
             session.close();
         }
+        return id;
     }
 
 	public List<Cliente> getClientes() {

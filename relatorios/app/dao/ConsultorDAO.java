@@ -13,7 +13,8 @@ import util.HibernateUtil;
 
 public class ConsultorDAO {
 
-	public void adicionarConsultor (Consultor consultor) {
+	public Integer adicionarConsultor (Consultor consultor) {
+		int id  = 0;
 		
         Transaction trns = null;
         HibernateUtil util;
@@ -24,16 +25,18 @@ public class ConsultorDAO {
         try {
             trns = session.beginTransaction();
             session.save(consultor);
+            id = consultor.getId();
             session.getTransaction().commit();
+            
         } catch (RuntimeException e) {
             if (trns != null) {
                 trns.rollback();
             }
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
+        return id;
     }
 
 	public List<Consultor> getConsultores() {

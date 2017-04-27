@@ -12,8 +12,9 @@ import util.HibernateUtil;
 
 public class StatusDAO {
 
-	public void adicionarStatus (Status status) {
+	public Integer adicionarStatus (Status status) {
 		
+		int id = 0;
         Transaction trns = null;
         HibernateUtil util;
         
@@ -23,16 +24,18 @@ public class StatusDAO {
         try {
             trns = session.beginTransaction();
             session.save(status);
+            id = status.getId();
             session.getTransaction().commit();
+           
         } catch (RuntimeException e) {
             if (trns != null) {
                 trns.rollback();
             }
             e.printStackTrace();
         } finally {
-            session.flush();
-            session.close();
-        }
+			session.close();
+		}
+        return id;
     }
 
 	public List<Status> getTodosStatus() {

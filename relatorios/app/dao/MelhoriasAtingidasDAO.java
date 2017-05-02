@@ -3,37 +3,43 @@ package dao;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import model.MelhoriasAtingidas;
+import model.ObsCronograma;
 import util.HibernateUtil;
 
 public class MelhoriasAtingidasDAO {
-	
-	public void adicionarMelhoria (MelhoriasAtingidas melhorias) {
-		
-        Transaction trns = null;
-        HibernateUtil util;
-        
-        util = HibernateUtil.getInstance();
-        Session session = util.getSession();
-        
-        try {
-            trns = session.beginTransaction();
-            session.save(melhorias);
-            session.getTransaction().commit();
-        } catch (RuntimeException e) {
-            if (trns != null) {
-                trns.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            session.flush();
-            session.close();
-        }
-    }
+
+	public Integer adicionarMelhoria(MelhoriasAtingidas melhorias) {
+
+		int id = 0;
+		Transaction trns = null;
+		HibernateUtil util;
+
+		util = HibernateUtil.getInstance();
+		Session session = util.getSession();
+
+		try {
+			trns = session.beginTransaction();
+			session.save(melhorias);
+			id = melhorias.getId();
+			session.getTransaction().commit();
+		} catch (RuntimeException e) {
+			if (trns != null) {
+				trns.rollback();
+			}
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return id;
+	}
 
 	public List<MelhoriasAtingidas> getMelhorias() {
 
@@ -46,7 +52,13 @@ public class MelhoriasAtingidasDAO {
 
 		try {
 			t = session.beginTransaction();
-			list = session.createQuery("from Melhorias_Atingidas").list();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<MelhoriasAtingidas> criteria = builder.createQuery(MelhoriasAtingidas.class);
+
+			criteria.from(MelhoriasAtingidas.class);
+
+			list = session.createQuery(criteria).getResultList();
 
 		} catch (HibernateException ex) {
 			if (t != null) {
@@ -73,8 +85,7 @@ public class MelhoriasAtingidasDAO {
 		try {
 
 			t = session.beginTransaction();
-			melhoria = (MelhoriasAtingidas) session.createQuery("from Melhorias_Atingidas where id = :id")
-					.setParameter("id", id).uniqueResult();
+			melhoria = session.get(MelhoriasAtingidas.class, id);
 		} catch (HibernateException ex) {
 			if (t != null) {
 				t.rollback();
@@ -87,7 +98,6 @@ public class MelhoriasAtingidasDAO {
 		return melhoria;
 	}
 
-	
 	public MelhoriasAtingidas updateMelhoriaAtingida(MelhoriasAtingidas melhoria) {
 		HibernateUtil instance;
 		instance = HibernateUtil.getInstance();
@@ -132,5 +142,5 @@ public class MelhoriasAtingidasDAO {
 			session.close();
 		}
 	}
-	
+
 }

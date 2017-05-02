@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -37,19 +38,18 @@ public class Atividades {
 	private Time fim;
 	@Column(name = "tempo")
 	private Time tempo;
-	
-	@OneToOne
+
+	@ManyToOne
 	@JoinColumn(name = "status_id")
 	private Status status;
-	
-	@OneToOne
+
+	@ManyToOne
 	@JoinColumn(name = "consultor_id")
 	private Consultor consultor;
-	
-	@OneToOne
+
+	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
-	
 
 	public int getId() {
 		return id;
@@ -58,7 +58,7 @@ public class Atividades {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public Date getData() {
 		return data;
 	}
@@ -106,10 +106,9 @@ public class Atividades {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-	
-	
+
 	public Status getStatus() {
-		return status;
+		return this.status;
 	}
 
 	public void setStatus(Status status) {
@@ -117,7 +116,7 @@ public class Atividades {
 	}
 
 	public Consultor getConsultor() {
-		return consultor;
+		return this.consultor;
 	}
 
 	public void setConsultor(Consultor consultor) {
@@ -125,7 +124,7 @@ public class Atividades {
 	}
 
 	public Cliente getCliente() {
-		return cliente;
+		return this.cliente;
 	}
 
 	public void setCliente(Cliente cliente) {

@@ -7,13 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "melhorias_atingidas")
+@Table(name = "melhorias")
 public class MelhoriasAtingidas {
-	
+
 	@Id
 	@Column(name = "id")
 	@GeneratedValue
@@ -22,20 +23,19 @@ public class MelhoriasAtingidas {
 	private String melhorias;
 	@Column(name = "criado")
 	private Timestamp criado;
-	
-	@OneToOne
+
+	@ManyToOne
 	@JoinColumn(name = "status_id")
 	private Status status;
-	
-	@OneToOne
+
+	@ManyToOne
 	@JoinColumn(name = "consultor_id")
 	private Consultor consultor;
-	
-	@OneToOne
+
+	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
-	
-	
+
 	public int getId() {
 		return id;
 	}
@@ -43,7 +43,7 @@ public class MelhoriasAtingidas {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public String getMelhorias() {
 		return melhorias;
 	}
@@ -53,7 +53,7 @@ public class MelhoriasAtingidas {
 	}
 
 	public Status getStatus() {
-		return status;
+		return this.status;
 	}
 
 	public void setStatus(Status status) {
@@ -61,7 +61,7 @@ public class MelhoriasAtingidas {
 	}
 
 	public Consultor getConsultor() {
-		return consultor;
+		return this.consultor;
 	}
 
 	public void setConsultor(Consultor consultor) {
@@ -69,7 +69,7 @@ public class MelhoriasAtingidas {
 	}
 
 	public Cliente getCliente() {
-		return cliente;
+		return this.cliente;
 	}
 
 	public void setCliente(Cliente cliente) {
@@ -83,6 +83,5 @@ public class MelhoriasAtingidas {
 	public void setCriado(Timestamp criado) {
 		this.criado = criado;
 	}
-	
-	
+
 }

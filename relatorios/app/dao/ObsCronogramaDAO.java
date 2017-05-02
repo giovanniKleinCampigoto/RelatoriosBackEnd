@@ -3,17 +3,21 @@ package dao;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import model.Cliente;
 import model.ObsCronograma;
 import util.HibernateUtil;
 
 public class ObsCronogramaDAO {
 	
-	public void adicionarObsCronograma (ObsCronograma obs) {
-		
+	public Integer adicionarObsCronograma (ObsCronograma obs) {
+		int id = 0;
         Transaction trns = null;
         HibernateUtil util;
         
@@ -23,16 +27,17 @@ public class ObsCronogramaDAO {
         try {
             trns = session.beginTransaction();
             session.save(obs);
+            id = obs.getId();
             session.getTransaction().commit();
         } catch (RuntimeException e) {
             if (trns != null) {
                 trns.rollback();
             }
             e.printStackTrace();
-        } finally {
-            session.flush();
+        } finally {           
             session.close();
         }
+        return id;
     }
 
 	public List<ObsCronograma> getObsCronogramas() {
@@ -46,7 +51,14 @@ public class ObsCronogramaDAO {
 
 		try {
 			t = session.beginTransaction();
-			list = session.createQuery("from Obs_Cronograma").list();
+			
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			
+			CriteriaQuery<ObsCronograma> criteria = builder.createQuery(ObsCronograma.class);
+			
+			criteria.from(ObsCronograma.class);
+
+		    list = session.createQuery(criteria).getResultList();
 
 		} catch (HibernateException ex) {
 			if (t != null) {
@@ -60,7 +72,8 @@ public class ObsCronogramaDAO {
 
 		return list;
 	}
-
+	
+	
 	public ObsCronograma getObsCronograma(int id) {
 
 		HibernateUtil instance;
@@ -71,10 +84,8 @@ public class ObsCronogramaDAO {
 		ObsCronograma obs = null;
 
 		try {
-
 			t = session.beginTransaction();
-			obs = (ObsCronograma) session.createQuery("from Obs_Cronograma where id = :id")
-					.setParameter("id", id).uniqueResult();
+			obs = session.get(ObsCronograma.class, id);
 		} catch (HibernateException ex) {
 			if (t != null) {
 				t.rollback();

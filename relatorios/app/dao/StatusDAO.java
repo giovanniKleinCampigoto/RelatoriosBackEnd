@@ -76,8 +76,7 @@ public class StatusDAO {
 		try {
 
 			t = session.beginTransaction();
-			status = (Status) session.createQuery("from Status where id = :id")
-					.setParameter("id", id).uniqueResult();
+			status = session.get(Status.class, id);
 		} catch (HibernateException ex) {
 			if (t != null) {
 				t.rollback();

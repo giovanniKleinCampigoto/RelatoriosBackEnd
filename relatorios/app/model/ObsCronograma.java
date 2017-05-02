@@ -7,11 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "obs_cronograma")
+@Table(name = "observacao")
 public class ObsCronograma {
 
 	@Id
@@ -25,8 +27,8 @@ public class ObsCronograma {
 	@Column(name = "criado")
 	private Timestamp criado;
 	
-	@OneToOne
-	@JoinColumn(name = "status_id")
+	@ManyToOne
+	@JoinColumn(name = "status_id")	
 	private Status status;
 	
 	public int getId() {
@@ -48,8 +50,9 @@ public class ObsCronograma {
 	public void setRealizado(String realizado) {
 		this.realizado = realizado;
 	}
+	
 	public Status getStatus() {
-		return status;
+		return this.status;
 	}
 	public void setStatus(Status status) {
 		this.status = status;

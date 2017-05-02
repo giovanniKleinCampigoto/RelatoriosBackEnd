@@ -2,6 +2,7 @@ package model;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +22,7 @@ public class Atividades {
 	@GeneratedValue
 	private int id;
 	@Column(name = "data")
-	private Date data;
+	private Timestamp data;
 	@Column(name = "area")
 	private String area;
 	@Column(name = "programa")
@@ -59,11 +60,11 @@ public class Atividades {
 		this.id = id;
 	}
 
-	public Date getData() {
+	public Timestamp getData() {
 		return data;
 	}
 
-	public void setData(Date data) {
+	public void setData(Timestamp data) {
 		this.data = data;
 	}
 

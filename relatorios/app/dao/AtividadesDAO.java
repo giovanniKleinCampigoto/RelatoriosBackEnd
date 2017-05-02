@@ -3,19 +3,24 @@ package dao;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import model.Atividades;
+import model.MelhoriasAtingidas;
 import util.HibernateUtil;
 
 public class AtividadesDAO {
 	
-	public void adicionarAtividades (Atividades atv) {
+	public Integer adicionarAtividades (Atividades atv) {
 		
         Transaction trns = null;
         HibernateUtil util;
+        int id = 0;
         
         util = HibernateUtil.getInstance();
         Session session = util.getSession();
@@ -23,6 +28,7 @@ public class AtividadesDAO {
         try {
             trns = session.beginTransaction();
             session.save(atv);
+            id = atv.getId();
             session.getTransaction().commit();
         } catch (RuntimeException e) {
             if (trns != null) {
@@ -30,9 +36,9 @@ public class AtividadesDAO {
             }
             e.printStackTrace();
         } finally {
-            session.flush();
             session.close();
         }
+        return id;
     }
 
 	public List<Atividades> getAtividades() {
@@ -46,7 +52,13 @@ public class AtividadesDAO {
 
 		try {
 			t = session.beginTransaction();
-			list = session.createQuery("from Cliente").list();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Atividades> criteria = builder.createQuery(Atividades.class);
+
+			criteria.from(Atividades.class);
+
+			list = session.createQuery(criteria).getResultList();
 
 		} catch (HibernateException ex) {
 			if (t != null) {
@@ -73,8 +85,7 @@ public class AtividadesDAO {
 		try {
 
 			t = session.beginTransaction();
-			atv = (Atividades) session.createQuery("from Atividades where id = :id")
-					.setParameter("id", id).uniqueResult();
+			atv = session.get(Atividades.class, id);
 		} catch (HibernateException ex) {
 			if (t != null) {
 				t.rollback();
@@ -88,7 +99,7 @@ public class AtividadesDAO {
 	}
 
 	
-	public Atividades updateCliente(Atividades atv) {
+	public Atividades updateAtividade(Atividades atv) {
 		HibernateUtil instance;
 		instance = HibernateUtil.getInstance();
 
